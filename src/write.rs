@@ -579,8 +579,17 @@ impl<S: Span> Report<S> {
                     write_margin(&mut w, 0, false, false, true, Some((0, false)), &[], &None)?;
                     write!(w, "\n")?;
                 }
+
+                let mut lines = note.lines();
+                let first_line = lines.next().unwrap();
+
                 write_margin(&mut w, 0, false, false, true, Some((0, false)), &[], &None)?;
-                write!(w, "{}: {}\n", "Note".fg(self.config.note_color()), note)?;
+                write!(w, "{}: {}\n", "Note".fg(self.config.note_color()), first_line)?;
+
+                for line in lines {
+                    write_margin(&mut w, 0, false, false, true, Some((0, false)), &[], &None)?;
+                    write!(w, "      {}\n", line)?;
+                }
             }
 
             // Tail of report
